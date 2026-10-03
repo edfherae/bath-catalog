@@ -1,3 +1,22 @@
-body {
-    background-color: skyblue;
+.list {
+    border: 2px solid gray;
+    border-radius: 10px;
+    width: 80vw;
+    margin: auto;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style-type: none;
+}
+
+.item {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    width: 80%;
+    justify-self: center;
+}
+
+.item h2 {
+    padding: none;
 }

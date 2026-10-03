@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Каталог проектов{% endblock %}
+
+{% block body %}
+    <h1>Каталог проектов бань</h1>
+
+    <ul class="list">
+        {% for p in projects %}
+            <li class="item">
+                <h2>{{ p.title }}</h2>
+                {{ p.area }} м2, {{ p.floors }} этажей
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

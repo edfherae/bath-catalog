@@ -7,10 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-// use App\Repository\ProjectRepository;
-// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// use Sy
-
 class ProjectController extends AbstractController {
     #[Route('/', name: 'app_home')]
     public function home(): Response {
