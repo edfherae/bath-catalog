@@ -42,7 +42,7 @@ class ProjectRepository extends ServiceEntityRepository {
             $qb->andWhere('p.area >= :areaMin')->setParameter('areaMin', $filter->areaMin);
         }
         if($filter->areaMax !== null) {
-            $qb->andWhere('p.area =< :areaMax')->setParameter('areaMax', $filter->areaMax);
+            $qb->andWhere('p.area <= :areaMax')->setParameter('areaMax', $filter->areaMax);
         }
         if(!empty($filter->floors)) {
             $qb->andWhere('p.floors IN (:floors)')->setParameter('floors', $filter->floors);

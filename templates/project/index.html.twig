@@ -5,12 +5,86 @@
 {% block body %}
     <h1>Каталог проектов бань</h1>
 
-    <ul class="list">
-        {% for p in projects %}
-            <li class="item">
-                <h2>{{ p.title }}</h2>
-                {{ p.area }} м2, {{ p.floors }} этажей
-            </li>
-        {% endfor %}
-    </ul>
+    <turbo-frame id="projects-list" data-turbo-action="advance">
+        <p>Найдено: {{ total }}, страница {{ page }} из {{ totalPages }}</p>
+
+        <form method="GET" action="{{ path('app_projects') }}">
+            <h2>Фильтры:</h2>
+            <p>Площадь:</p>
+            <label>
+                от
+                <input type="number" name="area_min" value="{{ filter.areaMin ?: '' }}" min="0" />
+            </label>
+            <label>
+                до
+                <input type="number" name="area_max" value="{{ filter.areaMax ?: '' }}" min="0" />
+                м2
+            </label>
+            <fieldset>
+                <legend>Этажность</legend>
+                <label>
+                    1 этаж
+                    <input type="checkbox" name="floors[]" value="1" {% if 1 in filter.floors %} checked {% endif %}
+                    />
+                </label>
+                <label>
+                    2 этажа
+                    <input type="checkbox" name="floors[]" value="2" {% if 2 in filter.floors %} checked {% endif %}/>
+                </label>
+            </fieldset>
+            <label>
+                Есть басcейн
+                <input type="checkbox" name="has_pool" value="1" {% if filter.hasPool %} checked {% endif %}
+                >
+            </label>
+            <button type="submit">Применить</button>
+        </form>
+        <ul class="list">
+            {% for p in projects %}
+                <li class="item">
+                    <h2>{{ p.title }}</h2>
+                    <img src="{{ p.imageUrl }}" alt="{{ p.title }}" width="200" height="150"/>
+                    <p>{{ p.area }} м2, {{ p.floors }} этажей</p>
+                    {% if p.hasPool %}
+                        <p>Есть бассейн</p>
+                    {% else %}
+                        <p>Нет бассейна</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        {% if totalPages > 1 %}
+            <nav class="pagination">
+                <a 
+                    class="{{ page <= 1 ? 'page-button button-disabled' : 'page-button'  }}"
+                    href="{{ path('app_projects', queryParams|merge({page: page - 1})) }}"
+                >
+                    Назад
+                </a>
+                {% for p in 1..totalPages %}
+                    {% if page == p %}
+                        <span class="page-button button-current"
+                        >{{ p }}</span>
+                    {% else %}
+                        <a 
+                            class="page-button"
+                            href="{{path('app_projects', 
+                            queryParams|merge({page: p}))}}"
+                        >
+                            {{ p }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                <a
+                    class="{{ page >= totalPages ? 'page-button button-disabled' : 'page-button' }}"
+                    href="{{ path('app_projects',
+                    queryParams|merge({page: page + 1})) }}"
+                >
+                    Вперед
+                </a>
+            </nav>
+        {% endif %}
+        
+    </turbo-frame>
+
 {% endblock %}
