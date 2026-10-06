@@ -1,3 +1,0 @@
-sensiolabs_typescript:
-    source_dir:
-        - '%kernel.project_dir%/assets'

@@ -8,36 +8,36 @@
     <turbo-frame id="projects-list" data-turbo-action="advance">
         <p>Найдено: {{ total }}, страница {{ page }} из {{ totalPages }}</p>
 
-        <form method="GET" action="{{ path('app_projects') }}">
+        <form method="GET" action="{{ path('app_projects') }}" data-controller="debounce">
             <h2>Фильтры:</h2>
             <p>Площадь:</p>
             <label>
                 от
-                <input type="number" name="area_min" value="{{ filter.areaMin ?: '' }}" min="0" />
+                <input type="number" name="area_min" value="{{ filter.areaMin ?: '' }}" min="0" data-action="input->debounce#submitWithDelay"/>
             </label>
             <label>
                 до
-                <input type="number" name="area_max" value="{{ filter.areaMax ?: '' }}" min="0" />
+                <input type="number" name="area_max" value="{{ filter.areaMax ?: '' }}" min="{{ filter.areaMin ?: 0 }}" data-action="input->debounce#submitWithDelay"/>
                 м2
             </label>
             <fieldset>
                 <legend>Этажность</legend>
                 <label>
                     1 этаж
-                    <input type="checkbox" name="floors[]" value="1" {% if 1 in filter.floors %} checked {% endif %}
+                    <input type="checkbox" name="floors[]" value="1" {% if 1 in filter.floors %} checked {% endif %} data-action="change->debounce#submitImmediately"
                     />
                 </label>
                 <label>
                     2 этажа
-                    <input type="checkbox" name="floors[]" value="2" {% if 2 in filter.floors %} checked {% endif %}/>
+                    <input type="checkbox" name="floors[]" value="2" {% if 2 in filter.floors %} checked {% endif %} data-action="change->debounce#submitImmediately"
+                    />
                 </label>
             </fieldset>
             <label>
                 Есть басcейн
-                <input type="checkbox" name="has_pool" value="1" {% if filter.hasPool %} checked {% endif %}
+                <input type="checkbox" name="has_pool" value="1" {% if filter.hasPool %} checked {% endif %} data-action="change->debounce#submitImmediately"
                 >
             </label>
-            <button type="submit">Применить</button>
         </form>
         <ul class="list">
             {% for p in projects %}
