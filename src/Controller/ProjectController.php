@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\DTO\ProjectFilter;
+use App\Service\FavouriteStorage;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\UX\Turbo\TurboBundle;
 
 class ProjectController extends AbstractController {
     #[Route('/', name: 'app_home')]
@@ -15,7 +17,7 @@ class ProjectController extends AbstractController {
         return $this->redirectToRoute('app_projects');
     }
     #[Route('/projects', name: 'app_projects')]
-    public function index(Request $request, ProjectRepository $repository) : Response {
+    public function index(Request $request, ProjectRepository $repository, FavouriteStorage $storage) : Response {
         $filter = new ProjectFilter(
             filter_var($request->query->get('area_min'), FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE),
             filter_var($request->query->get('area_max'), FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE),
@@ -49,7 +51,20 @@ class ProjectController extends AbstractController {
             'queryParams' => $queryParams,
             'page' => $page,
             'totalPages' => $totalPages,
-            'total' => $result['total']
+            'total' => $result['total'],
+            'favourites' => $storage->getAll(),
+        ]);
+    }
+    #[Route('/projects/{id}/favourite', name: 'app_project_favourite', methods: ['POST'])]
+    public function favourite(int $id, Request $request, FavouriteStorage $storage) : Response {
+        $isFavourite = $storage->toggle($id);
+
+        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+        return $this->render('project/favourite.stream.html.twig', [
+            'projectId' => $id,
+            'isFavourite' => $isFavourite,
+            'count' => $storage->count(),
         ]);
     }
 }

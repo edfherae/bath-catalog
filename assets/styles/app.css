@@ -50,3 +50,8 @@
     opacity: 0.5;
     cursor: default;
 }
+
+.button-active {
+    color: white;
+    background-color: brown;
+}

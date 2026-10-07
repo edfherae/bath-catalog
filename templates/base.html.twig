@@ -9,6 +9,11 @@
         {% endblock %}
     </head>
     <body>
+        <header>
+            <span id="favourites-count">
+                {{ app.session.get('favourite', [])|length }}
+            </span>
+        </header>
         {% block body %}{% endblock %}
     </body>
 </html>

@@ -50,6 +50,10 @@
                     {% else %}
                         <p>Нет бассейна</p>
                     {% endif %}
+                    {{ include('project/_favourite_button.html.twig', {
+                        projectId: p.id,
+                        isFavourite: p.id in favourites
+                    }) }}
                 </li>
             {% endfor %}
         </ul>
