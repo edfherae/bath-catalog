@@ -44,12 +44,19 @@
                 <li class="item">
                     <h2>{{ p.title }}</h2>
                     <img src="{{ p.imageUrl }}" alt="{{ p.title }}" width="200" height="150"/>
-                    <p>{{ p.area }} м2, {{ p.floors }} этажей</p>
+                    <p>{{ p.area }} м², {{ p.floors }} этажей</p>
                     {% if p.hasPool %}
                         <p>Есть бассейн</p>
                     {% else %}
                         <p>Нет бассейна</p>
                     {% endif %}
+                    <a
+                    class="button" 
+                    href="{{ path('app_projects_modal', {id: p.id}) }}"
+                    data-turbo-frame="modal"
+                    >
+                    Подробнее
+                    </a>
                     {{ include('project/_favourite_button.html.twig', {
                         projectId: p.id,
                         isFavourite: p.id in favourites

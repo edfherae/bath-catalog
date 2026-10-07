@@ -1,0 +1,30 @@
+<turbo-frame id="modal">
+    <div class="modal-overlay" data-modal-target="overlay" data-action="click->modal#closeOnOverlay">
+        <div class="modal" data-modal-target="content">
+            <button
+            type="button"
+            class="modal__close"
+            data-action="click->modal#close"
+            >
+            x
+            </button>
+
+            <img class="modal__image" src="{{ project.imageUrl }}" alt="{{ project.title }}"/>
+
+            <div class="modal__body">
+                <h2 class="modal__title">{{ project.title }}</h2>
+                <p class="modal__description">{{ project.description }}</p>
+                <div class="modal__description-list">
+                    <div>Площадь: <span>{{ project.area }} м2</span></div>
+                    <div>Количество этажей: <span>{{ project.floors }}</span></div>
+                    {% if project.hasPool %}
+                        <div>Есть бассейн</div>
+                    {% else %}
+                        <div>Нет бассейна</div>
+                    {% endif %}
+                    <div>Цена <span>{{ project.price|number_format(0, '.', ' ') }}Р</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</turbo-frame>

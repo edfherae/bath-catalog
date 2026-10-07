@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\DTO\ProjectFilter;
+use App\Entity\Project;
 use App\Service\FavouriteStorage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\UX\Turbo\TurboBundle;
@@ -55,7 +56,7 @@ class ProjectController extends AbstractController {
             'favourites' => $storage->getAll(),
         ]);
     }
-    #[Route('/projects/{id}/favourite', name: 'app_project_favourite', methods: ['POST'])]
+    #[Route('/projects/{id}/favourite', name: 'app_projects_favourite', methods: ['POST'])]
     public function favourite(int $id, Request $request, FavouriteStorage $storage) : Response {
         $isFavourite = $storage->toggle($id);
 
@@ -65,6 +66,12 @@ class ProjectController extends AbstractController {
             'projectId' => $id,
             'isFavourite' => $isFavourite,
             'count' => $storage->count(),
+        ]);
+    }
+    #[Route('/projects/{id}/modal', name: 'app_projects_modal', methods: ['GET'])]
+    public function molal(Project $project): Response {
+        return $this->render('project/modal.html.twig', [
+            'project' => $project,
         ]);
     }
 }
