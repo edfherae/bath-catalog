@@ -1,0 +1,21 @@
+<form 
+    method="POST"
+    action="{{ path('app_projects_favourite', {id: projectId}) }}"
+    id="favourite-button-{{ projectId }}"
+    data-controller="favourite">
+
+    <input type="hidden" name="_token" value="{{ csrf_token('favourite' ~ projectId) }}">
+
+    <button 
+    type="submit"
+    class="{{ isFavourite ? "favourite-button favourite-button--active" : "favourite-button" }}"
+    >
+        {% if isFavourite %}
+            <span class="favourite-button__text">В избранном</span>
+            <span class="favourite-button__icon favourite-button__icon--active">❤</span>
+        {% else %}
+            <span class="favourite-button__text">В избранное</span>
+            <span class="favourite-button__icon">→</span>
+        {% endif %}
+    </button>
+</form>

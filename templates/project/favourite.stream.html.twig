@@ -1,0 +1,14 @@
+<turbo-stream action="replace" target="favourite-button-{{ projectId }}">
+    <template>
+        {{ include('project/_favourite_button.html.twig', {
+            projectId: projectId,
+            isFavourite: isFavourite,
+        }) }}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="header__favourites-count">
+    <template>
+        <span id="header__favourites-count">В избранном: {{ count }}</span>
+    </template>
+</turbo-stream>
