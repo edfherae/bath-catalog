@@ -1,84 +1,85 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Каталог проектов{% endblock %}
+{% block title %}Каталог бань{% endblock %}
 
 {% block body %}
-    <h1>Каталог проектов бань</h1>
-
     <turbo-frame id="projects-list" data-turbo-action="advance">
-        <p>Найдено: {{ total }}, страница {{ page }} из {{ totalPages }}</p>
 
-        <form method="GET" action="{{ path('app_projects') }}" data-controller="debounce">
+        <form class="filters" method="GET" action="{{ path('app_projects') }}" data-controller="debounce">
             <h2>Фильтры:</h2>
             <p>Площадь:</p>
             <label>
                 от
-                <input type="number" name="area_min" value="{{ filter.areaMin ?: '' }}" min="0" data-action="input->debounce#submitWithDelay"/>
+                <input class="input" type="number" name="area_min" value="{{ filter.areaMin ?: '' }}" min="0" data-action="input->debounce#submitWithDelay"/>
             </label>
             <label>
                 до
-                <input type="number" name="area_max" value="{{ filter.areaMax ?: '' }}" min="{{ filter.areaMin ?: 0 }}" data-action="input->debounce#submitWithDelay"/>
-                м2
+                <input class="input" type="number" name="area_max" value="{{ filter.areaMax ?: '' }}" min="{{ filter.areaMin ?: 0 }}" data-action="input->debounce#submitWithDelay"/>
+                м²
             </label>
-            <fieldset>
-                <legend>Этажность</legend>
+            <fieldset class="fieldset-floors">
+                <legend class="fieldset-floors__legend">Этажность</legend>
                 <label>
                     1 этаж
-                    <input type="checkbox" name="floors[]" value="1" {% if 1 in filter.floors %} checked {% endif %} data-action="change->debounce#submitImmediately"
+                    <input class="checkbox" type="checkbox" name="floors[]" value="1" {% if 1 in filter.floors %} checked {% endif %} data-action="change->debounce#submitImmediately"
                     />
                 </label>
                 <label>
                     2 этажа
-                    <input type="checkbox" name="floors[]" value="2" {% if 2 in filter.floors %} checked {% endif %} data-action="change->debounce#submitImmediately"
+                    <input class="checkbox" type="checkbox" name="floors[]" value="2" {% if 2 in filter.floors %} checked {% endif %} data-action="change->debounce#submitImmediately"
                     />
                 </label>
             </fieldset>
             <label>
-                Есть басcейн
-                <input type="checkbox" name="has_pool" value="1" {% if filter.hasPool %} checked {% endif %} data-action="change->debounce#submitImmediately"
+                Только с бассейном
+                <input class="checkbox" type="checkbox" name="has_pool" value="1" {% if filter.hasPool %} checked {% endif %} data-action="change->debounce#submitImmediately"
                 >
             </label>
         </form>
         <ul class="list">
+            <p class="list__counter">Найдено: {{ total }}, страница {{ page }} из {{ totalPages }}</p>
             {% for p in projects %}
-                <li class="item">
-                    <h2>{{ p.title }}</h2>
-                    <img src="{{ p.imageUrl }}" alt="{{ p.title }}" width="200" height="150"/>
-                    <p>{{ p.area }} м², {{ p.floors }} этажей</p>
-                    {% if p.hasPool %}
-                        <p>Есть бассейн</p>
-                    {% else %}
-                        <p>Нет бассейна</p>
-                    {% endif %}
-                    <a
-                    class="button" 
-                    href="{{ path('app_projects_modal', {id: p.id}) }}"
-                    data-turbo-frame="modal"
-                    >
-                    Подробнее
-                    </a>
-                    {{ include('project/_favourite_button.html.twig', {
-                        projectId: p.id,
-                        isFavourite: p.id in favourites
-                    }) }}
+                <li class="card">
+                    <div class="card__header">
+                        <h2 class="card__title">{{ p.title }}</h2>
+                        <img class="card__image" src="{{ p.imageUrl }}" alt="{{ p.title }}"/>
+                    </div>
+                    <div class="card__body">
+                        <p>{{ p.description }}</p>
+                        <p>Площадь {{ p.area }} м²</p>
+                        <p>Этажей: {{ p.floors }}</p>
+                    </div>
+                    <div class="card__footer">
+                        <a
+                        class="card__button" 
+                        href="{{ path('app_projects_modal', {id: p.id}) }}"
+                        data-turbo-frame="modal"
+                        >
+                        Подробнее
+                        </a>
+                        {{ include('project/_favourite_button.html.twig', {
+                            projectId: p.id,
+                            isFavourite: p.id in favourites
+                        }) }}
+                    </div>
                 </li>
             {% endfor %}
         </ul>
         {% if totalPages > 1 %}
             <nav class="pagination">
                 <a 
-                    class="{{ page <= 1 ? 'page-button button-disabled' : 'page-button'  }}"
+                    class="{{ page <= 1 ? 'pagination__button pagination__button--wide pagination__button--disabled' : 'pagination__button pagination__button--wide'  }}"
                     href="{{ path('app_projects', queryParams|merge({page: page - 1})) }}"
                 >
                     Назад
                 </a>
                 {% for p in 1..totalPages %}
                     {% if page == p %}
-                        <span class="page-button button-current"
+                        <span class="pagination__button pagination__button--current"
                         >{{ p }}</span>
                     {% else %}
                         <a 
-                            class="page-button"
+                            class="pagination__button"
                             href="{{path('app_projects', 
                             queryParams|merge({page: p}))}}"
                         >
@@ -87,7 +88,7 @@
                     {% endif %}
                 {% endfor %}
                 <a
-                    class="{{ page >= totalPages ? 'page-button button-disabled' : 'page-button' }}"
+                    class="{{ page >= totalPages ? 'pagination__button pagination__button--wide pagination__button--disabled' : 'pagination__button pagination__button--wide' }}"
                     href="{{ path('app_projects',
                     queryParams|merge({page: page + 1})) }}"
                 >

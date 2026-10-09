@@ -9,9 +9,10 @@
         {% endblock %}
     </head>
     <body>
-        <header>
-            <span id="favourites-count">
-                {{ app.session.get('favourite', [])|length }}
+        <header class="header">
+            <h1 class="header__title">Каталог бань</h1>
+            <span id="header__favourites-count">
+                В избранном: {{ app.session.get('favourite', [])|length }}
             </span>
         </header>
         {% block body %}{% endblock %}
