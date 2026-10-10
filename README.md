@@ -1,6 +1,6 @@
 ### Требования
 
-Docker desktop 
+Docker desktop, 
 Git
 
 ### Запуск: 
