@@ -1,0 +1,5 @@
+# Все текстовые файлы — LF в репозитории
+* text=auto eol=lf
+
+# Shell-скрипты ОБЯЗАТЕЛЬНО LF: их исполняет /bin/sh внутри Linux
+*.sh text eol=lf
