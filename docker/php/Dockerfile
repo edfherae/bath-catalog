@@ -1,5 +1,9 @@
 FROM php:8.4-fpm-alpine
 
+#uid/gid, под которыми работаем внутри контейнера
+ARG PUID=1000
+ARG PGID=1000
+
 # Системные зависимости для сборки расширений
 RUN apk add --no-cache \
     git \
@@ -23,14 +27,20 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Рабочая директория
 WORKDIR /var/www/html
 
-# Права на var/ (кэш и логи Symfony)
-RUN mkdir -p var/cache var/log && chmod -R 777 var
+RUN addgroup -g "${PGID}" app \
+    && adduser -u "${PUID}" -D -G app -h /home/app -s /sbin/nologin app \
+    && mkdir -p var/cache var/log \
+    && chown -R app:app /home/app var
 
 # Копируем entrypoint скрипт из папки docker/php в контейнер
 COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Даем скрипту права на выполнение
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# работали под www-data (82), теперь работаем под app (uid хоста)
+USER app
+ENV HOME=/home/app
 
 EXPOSE 9000
 

@@ -13,10 +13,13 @@ services:
             - bath_net
 
     php:
-        user: www-data
+        user: app
         build:
             context: .
             dockerfile: docker/php/Dockerfile
+            args:
+                PUID: ${PUID:-1000}
+                PGID: ${PGID:-1000}
         container_name: bath_php
         volumes:
             - .:/var/www/html
