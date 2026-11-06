@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [ ! -d "vendor" ] then
+if [ ! -d "vendor" ]; then
     echo "Installing Composer dependencies..."
     composer install --no-interaction --optimize-autoloader
 fi
