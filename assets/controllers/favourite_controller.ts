@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller<HTMLFormElement> {
     connect(): void {
@@ -11,15 +11,19 @@ export default class extends Controller<HTMLFormElement> {
     }
     onStart = () => {
         this.lockAll(true);
-    }
+    };
     onEnd = () => {
         this.lockAll(false);
-    }
-    private lockAll(isRequestActive : boolean): void {
-        let buttons = document.querySelectorAll<HTMLButtonElement>(".favourite-button");
-        buttons.forEach(button => {
+    };
+    private lockAll(isRequestActive: boolean): void {
+        let buttons =
+            document.querySelectorAll<HTMLButtonElement>(".favourite-button");
+        buttons.forEach((button) => {
             button.disabled = isRequestActive;
-            button.classList.toggle("favourite-button--disabled", isRequestActive);
-        })
+            button.classList.toggle(
+                "favourite-button--disabled",
+                isRequestActive,
+            );
+        });
     }
 }
