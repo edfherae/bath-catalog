@@ -4,7 +4,7 @@
     id="favourite-button-{{ projectId }}"
     data-controller="favourite">
 
-    <input type="hidden" name="_token" value="{{ csrf_token('favourite' ~ projectId) }}">
+    <input type="hidden" name="_token" data-controller="csrf-protection" value="{{ csrf_token('favourite' ~ projectId) }}">
 
     <button 
     type="submit"
